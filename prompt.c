@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * inter_md - a function that
  * enters the prompt to iteractive mode
