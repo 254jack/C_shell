@@ -4,81 +4,51 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define MAX_COMMAND_LENGTH 512
-
-/**
- * main - Entry point of the shell program
- *
- * Return: Always 0
- */
-int main(void)
+void prompt(char **av, char **env)
 {
-    char command[MAX_COMMAND_LENGTH];
-    pid_t pid;
-    int status;
+	char *string = NULL;
+	int i, status;
+	size_t n = 0;
+	ssize_t n_char;
+	char *argv[] = {NULL, NULL};
+	pid_t c_pid;
 
-    while (1)
-    {
-        printf("#cisfun$ ");
-        fgets(command, sizeof(command), stdin);
+	while (1)
+	{
+		printf("Cisfun$ ");
+		n_char = getline(&string, &n, stdin);
+		if (n_char == -1)
+		{
+			free(string);
+			exit(EXIT_FAILURE);
+		}
+		
+		i = 0;
+		while(string[i])
+		{
+			if (string[i] == '\n')
+			string[i] = 0;
+			i++;
 
-        /* Remove the newline character from the command */
-        command[strcspn(command, "\n")] = '\0';
+		}
+		c_pid = fork();
+		argv[0] = string;
+		if (c_pid == -1)
+		{
+			free(string);
+			exit(EXIT_FAILURE);
+		}
+		if (c_pid == 0)
+		{
+			if (execve(argv[0],argv,env) == -1)
+			{
+				printf("%s: No such file of directory\n", av[0]);
+			}
 
-        /* Check for end of file condition */
-        if (feof(stdin))
-        {
-            printf("\n");
-            break;
-        }
 
-        /* Fork a child process */
-        pid = fork();
-
-        if (pid == -1)
-        {
-            fprintf(stderr, "Error forking process\n");
-            continue;
-        }
-        else if (pid == 0)
-        {
-            /* Child process */
-
-            /* Execute the command */
-            status = system(command);
-
-            /* If system returns, there was an error */
-            if (status == -1)
-            {
-                fprintf(stderr, "Error executing command\n");
-                exit(EXIT_FAILURE);
-            }
-            exit(EXIT_SUCCESS);
-        }
-        else
-        {
-            /* Parent process */
-
-            /* Wait for the child process to complete */
-            int childStatus;
-            waitpid(pid, &childStatus, 0);
-
-            /* Check if the child process exited normally */
-            if (WIFEXITED(childStatus))
-            {
-                int exitStatus = WEXITSTATUS(childStatus);
-                if (exitStatus != 0)
-                {
-                    fprintf(stderr, "Command exited with status %d\n", exitStatus);
-                }
-            }
-            else if (WIFSIGNALED(childStatus))
-            {
-                int signalNumber = WTERMSIG(childStatus);
-                fprintf(stderr, "Command terminated with signal %d\n", signalNumber);
-            }
-        }
-    }
-
-    return 0;
+		}
+		else{
+			wait(&status);
+		}
+	}
 }
