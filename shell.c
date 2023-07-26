@@ -4,6 +4,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+/**
+ * prompt - a function that displays
+ * a prompt and execute user commands
+ * @av: argument vector
+ * @env: enronment variable
+ */
 void prompt(char **av, char **env)
 {
 	char *string = NULL;
@@ -16,24 +22,27 @@ void prompt(char **av, char **env)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-		printf("Cisfun$ ");
+			printf("Cisfun$ ");
 		n_char = getline(&string, &n, stdin);
+
 		if (n_char == -1)
 		{
 			free(string);
 			exit(EXIT_FAILURE);
 		}
-		
+
 		i = 0;
-		while(string[i])
+
+		while (string[i])
 		{
 			if (string[i] == '\n')
-			string[i] = 0;
+				string[i] = 0;
 			i++;
-
 		}
+
 		c_pid = fork();
 		argv[0] = string;
+		
 		if (c_pid == -1)
 		{
 			free(string);
@@ -41,14 +50,13 @@ void prompt(char **av, char **env)
 		}
 		if (c_pid == 0)
 		{
-			if (execve(argv[0],argv,env) == -1)
+			if (execve(argv[0], argv, env) == -1)
 			{
-				printf("%s: No such file of directory\n", av[0]);
+				printf("%s: No such file or directory\n", av[0]);
 			}
-
-
 		}
-		else{
+		else
+		{
 			wait(&status);
 		}
 	}
