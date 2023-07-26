@@ -18,70 +18,67 @@ void display_prompt(void);
  */
 int main(void)
 {
-    char buffer[BUFFER_SIZE];
-    ssize_t read_bytes;
-    int exit_shell = 0;
-    pid_t pid; /* Move the declaration of pid outside of the block */
+	char buffer[BUFFER_SIZE];
+	ssize_t read_bytes;
+	int exit_shell = 0;
+	pid_t pid = fork();
 
-    while (!exit_shell)
-    {
-        display_prompt();
+	while (!exit_shell)
+	{
+		display_prompt();
 
-        read_bytes = read(STDIN_FILENO, buffer, BUFFER_SIZE);
-        if (read_bytes == -1)
-        {
-            perror("read");
-            exit(EXIT_FAILURE);
-        }
+		read_bytes = read(STDIN_FILENO, buffer, BUFFER_SIZE);
+		if (read_bytes == -1)
+		{
+			perror("read");
+			exit(EXIT_FAILURE);
+		}
 
-        /* Handle end of file (Ctrl+D) */
-        if (read_bytes == 0)
-        {
-            putchar('\n');
-            exit_shell = 1;
-            continue;
-        }
+		/* Handle end of file (Ctrl+D) */
+		if (read_bytes == 0)
+		{
+			putchar('\n');
+			exit_shell = 1;
+			continue;
+		}
 
-        /* Null-terminate the input string */
-        buffer[read_bytes - 1] = '\0';
+		/* Null-terminate the input string */
+		buffer[read_bytes - 1] = '\0';
 
-        /* Fork to create a child process */
-        pid = fork();
-        if (pid == -1)
-        {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
+		/* Check if the user entered 'exit' command */
+		if (strcmp(buffer, "exit") == 0)
+		{
+			exit_shell = 1;
+			continue;
+		}
 
-        if (pid == 0)
-        {
-            /* In the child process */
-            char *argv[2];
-            char *path = strchr(buffer, '/');
-            if (path)
-                argv[0] = path; /* Use the full path */
-            else
-                argv[0] = buffer; /* Search in the PATH */
+		/* Fork to create a child process */
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
 
-            argv[1] = NULL;
+		if (pid == 0)
+		{
+			/* In the child process */
+			/* Execute the command using execve */
+			if (execlp(buffer, buffer, NULL) == -1)
+			{
+				perror(buffer);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			/* In the parent process */
+			/* Wait for the child process to complete */
+			int status;
+			wait(&status);
+		}
+	}
 
-            /* Execute the command using execve */
-            if (execve(argv[0], argv, NULL) == -1)
-            {
-                perror(argv[0]);
-                exit(EXIT_FAILURE);
-            }
-        }
-        else
-        {
-            /* In the parent process */
-            /* Wait for the child process to complete */
-            int status;
-            waitpid(pid, &status, 0);
-        }
-    }
-
-    return 0;
+	return 0;
 }
 
 /**
@@ -89,6 +86,5 @@ int main(void)
  */
 void display_prompt(void)
 {
-    printf("#cisfun$ ");
-    fflush(stdout); /* Flush the output buffer to ensure prompt is displayed */
+	printf("#cisfun$ ");
 }
