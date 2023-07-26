@@ -1,14 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-
+#include "shell.h"
 /**
- * prompt - a function that displays
- * a prompt and execute user commands
- * @av: argument vector
- * @env: enronment variable
+ * prompt - Displays a prompt and executes user commands
+ * @av: Argument vector
+ * @env: Environment variable
  */
 void prompt(char **av, char **env)
 {
@@ -27,8 +21,18 @@ void prompt(char **av, char **env)
 
 		if (n_char == -1)
 		{
-			free(string);
-			exit(EXIT_FAILURE);
+			if (feof(stdin))
+			{
+				printf("\n");
+				free(string);
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				perror("getline");
+				free(string);
+				exit(EXIT_FAILURE);
+			}
 		}
 
 		i = 0;
@@ -42,7 +46,6 @@ void prompt(char **av, char **env)
 
 		c_pid = fork();
 		argv[0] = string;
-		
 		if (c_pid == -1)
 		{
 			free(string);
@@ -54,10 +57,14 @@ void prompt(char **av, char **env)
 			{
 				printf("%s: No such file or directory\n", av[0]);
 			}
+			exit(EXIT_FAILURE);
 		}
 		else
 		{
 			wait(&status);
 		}
+
+		free(string);
+		string = NULL;
 	}
 }
