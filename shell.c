@@ -15,15 +15,13 @@ void prompt(char **av, char **env)
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			printf("Cisfun$ ");
+		printf("Cisfun$ ");
 		n_char = getline(&string, &n, stdin);
 
 		if (n_char == -1)
 		{
 			if (feof(stdin))
 			{
-				printf("\n");
 				free(string);
 				exit(EXIT_SUCCESS);
 			}
