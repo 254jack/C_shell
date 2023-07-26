@@ -5,23 +5,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <sys/wait.h>
-/**
- * Maximum command length
-*/
-#define MAX_CMD_LENGTH 100
-/**
- * Maximum arguments
-*/
-#define MAX_ARGUMENTS 10
-/**
- * prompt - a function that handles the prompt and read user input
- *
- * Return: 0
- */
-int prompt(void);
 
+#define EXIT_SHELL 10
+#define ARG_MAX 64
 
-int execute(const char *cmd);
+int main(void);
+char *read_line(void);
+int execute_command(char *command);
+int execute_cd(char **args);
+int execute_env(void);
+int execute_external(char **args);
+void print_prompt(void);
 
-#endif 
+#endif /* SHELL_H */
