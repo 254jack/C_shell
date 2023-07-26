@@ -1,8 +1,9 @@
 #include "shell.h"
-
-int main(int ac, char **argv){
-  char *prompt = "(shell) $ ";
-
-  printf("%s", prompt);
+/**
+ * betty - betty function
+ * Return: 0
+*/
+int betty(void){
+  printf("Hello, Jack && Chacha");
   return (0);
 }
