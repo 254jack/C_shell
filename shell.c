@@ -15,6 +15,7 @@ void prompt(char **av, char **env)
 
 	while (1)
 	{
+		if (isatty(STDIN_FILENO))
 		printf("Cisfun$ ");
 		n_char = getline(&string, &n, stdin);
 		if (n_char == -1)
