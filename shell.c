@@ -1,90 +1,84 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/wait.h>
 
-#define BUFFER_SIZE 1024
+#define MAX_COMMAND_LENGTH 512
 
 /**
- * display_prompt - Displays the shell prompt.
- */
-void display_prompt(void);
-
-/**
- * main - Entry point of the simple shell.
+ * main - Entry point of the shell program
  *
- * Return: Always 0.
+ * Return: Always 0
  */
 int main(void)
 {
-	char buffer[BUFFER_SIZE];
-	ssize_t read_bytes;
-	int exit_shell = 0;
-	pid_t pid = fork();
+    char command[MAX_COMMAND_LENGTH];
+    pid_t pid;
+    int status;
 
-	while (!exit_shell)
-	{
-		display_prompt();
+    while (1)
+    {
+        printf("#cisfun$ ");
+        fgets(command, sizeof(command), stdin);
 
-		read_bytes = read(STDIN_FILENO, buffer, BUFFER_SIZE);
-		if (read_bytes == -1)
-		{
-			perror("read");
-			exit(EXIT_FAILURE);
-		}
+        /* Remove the newline character from the command */
+        command[strcspn(command, "\n")] = '\0';
 
-		/* Handle end of file (Ctrl+D) */
-		if (read_bytes == 0)
-		{
-			putchar('\n');
-			exit_shell = 1;
-			continue;
-		}
+        /* Check for end of file condition */
+        if (feof(stdin))
+        {
+            printf("\n");
+            break;
+        }
 
-		/* Null-terminate the input string */
-		buffer[read_bytes - 1] = '\0';
+        /* Fork a child process */
+        pid = fork();
 
-		/* Check if the user entered 'exit' command */
-		if (strcmp(buffer, "exit") == 0)
-		{
-			exit_shell = 1;
-			continue;
-		}
+        if (pid == -1)
+        {
+            fprintf(stderr, "Error forking process\n");
+            continue;
+        }
+        else if (pid == 0)
+        {
+            /* Child process */
 
-		/* Fork to create a child process */
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
+            /* Execute the command */
+            status = system(command);
 
-		if (pid == 0)
-		{
-			/* In the child process */
-			/* Execute the command using execve */
-			if (execlp(buffer, buffer, NULL) == -1)
-			{
-				perror(buffer);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			/* In the parent process */
-			/* Wait for the child process to complete */
-			int status;
-			wait(&status);
-		}
-	}
+            /* If system returns, there was an error */
+            if (status == -1)
+            {
+                fprintf(stderr, "Error executing command\n");
+                exit(EXIT_FAILURE);
+            }
+            exit(EXIT_SUCCESS);
+        }
+        else
+        {
+            /* Parent process */
 
-	return 0;
-}
+            /* Wait for the child process to complete */
+            int childStatus;
+            waitpid(pid, &childStatus, 0);
 
-/**
- * display_prompt - Displays the shell prompt.
- */
-void display_prompt(void)
-{
-	printf("#cisfun$ ");
+            /* Check if the child process exited normally */
+            if (WIFEXITED(childStatus))
+            {
+                int exitStatus = WEXITSTATUS(childStatus);
+                if (exitStatus != 0)
+                {
+                    fprintf(stderr, "Command exited with status %d\n", exitStatus);
+                }
+            }
+            else if (WIFSIGNALED(childStatus))
+            {
+                int signalNumber = WTERMSIG(childStatus);
+                fprintf(stderr, "Command terminated with signal %d\n", signalNumber);
+            }
+        }
+    }
+
+    return 0;
 }
