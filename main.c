@@ -6,16 +6,14 @@
 #include "shell.h"
 /**
  * main - the main function of my project
- * @argc: argument count of my project.
- * @argv: argment venctor
- * @env: environment variable
+ * @argc: argument count
+ * @argv: argument vector
+ * @env: environment varaible
  * Return: 0
-*/
+ */
 int main(int argc, char **argv, char **env)
 {
-	if (argc == 1)
-	{
-		prompt(argv, env);
-	}
-	return (0);
+	(void)argc;
+	prompt(argv, env);
+	return (EXIT_SUCCESS);
 }
