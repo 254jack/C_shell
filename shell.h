@@ -7,5 +7,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#define MAX_ARGS 10
+
 void prompt(char **av, char **env);
 #endif

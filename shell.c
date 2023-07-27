@@ -6,47 +6,47 @@
  */
 void prompt(char **av, char **env)
 {
-	char *string = NULL;
+	char *cmd = NULL;
 	int i, status;
 	size_t n = 0;
 	ssize_t n_char;
-	char *argv[] = {NULL, NULL};
+	char *argv[MAX_ARGS];
 	pid_t c_pid;
 
 	while (1)
 	{
 		printf("Cisfun$ ");
-		n_char = getline(&string, &n, stdin);
+		n_char = getline(&cmd, &n, stdin);
 
 		if (n_char == -1)
 		{
 			if (feof(stdin))
 			{
-				free(string);
+				free(cmd);
 				exit(EXIT_SUCCESS);
 			}
 			else
 			{
 				perror("getline");
-				free(string);
+				free(cmd);
 				exit(EXIT_FAILURE);
 			}
 		}
 
 		i = 0;
 
-		while (string[i])
+		while (cmd[i])
 		{
-			if (string[i] == '\n')
-				string[i] = 0;
+			if (cmd[i] == '\n')
+				cmd[i] = 0;
 			i++;
 		}
 
 		c_pid = fork();
-		argv[0] = string;
+		argv[0] = cmd;
 		if (c_pid == -1)
 		{
-			free(string);
+			free(cmd);
 			exit(EXIT_FAILURE);
 		}
 		if (c_pid == 0)
@@ -62,7 +62,7 @@ void prompt(char **av, char **env)
 			wait(&status);
 		}
 
-		free(string);
-		string = NULL;
+		free(cmd);
+		cmd = NULL;
 	}
 }
