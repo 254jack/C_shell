@@ -8,16 +8,27 @@
 #include <sys/wait.h>
 
 #define MAX_ARGS 10
+
 /**
-  *removes the new line charatcter from the string.
-  *@param str the string to modify
-**/
+ * Removes the newline character from a string.
+ * @param str The string to modify
+ */
+void removeNewline(char *str);
+
+/**
+ * Tokenizes a command string into arguments.
+ * @param cmd The command string to tokenize
+ * @param argv The array to store the arguments
+ */
+void tokenizeCommand(char *cmd, char **argv);
+
+/**
+ * Executes a command using execve.
+ * @param cmd The command to execute
+ * @param argv The arguments for the command
+ * @param env The environment variable
+ */
+void executeCommand(char *cmd, char **argv, char **env);
 
 void prompt(char **av, char **env);
-/**
-  tokenize cmd string to tokenize arguments
-  *@param cmd The command string to tokenize
- * @param argv The
- * Description: array to store the arguments
-**/
 #endif
