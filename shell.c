@@ -1,7 +1,9 @@
 #include "shell.h"
 
+#define MAX_ARGS 10
+
 /**
- * prompt - Displays a prompt and executes user Cmds
+ * prompt - Displays a prompt and executes user cmds
  * @av: Argument vector
  * @env: Environment variable
  */
@@ -48,6 +50,7 @@ void prompt(char **av, char **env)
 		cmd = NULL;
 	}
 }
+
 /**
  * lid_ln - a function that removes the newline
  * @str: string
@@ -64,9 +67,10 @@ void lid_ln(char *str)
 		i++;
 	}
 }
+
 /**
  * tokenizeCmd - a function that splits the string into tokens
- * @cmd: string command
+ * @cmd: string cmd
  * @argv: argument vector
  * Return: 0
  */
@@ -82,16 +86,16 @@ void tokenizeCmd(char *cmd, char **argv)
 }
 
 /**
- * executeCmd - a function that executes a Cmd using execve.
- * @cmd: The Cmd to execute
- * @argv: The arguments for the Cmd
+ * executeCmd - a function that executes a cmd using execve.
+ * @cmd: The cmd to execute
+ * @argv: The arguments for the cmd
  * @env: The environment variable
  */
 void executeCmd(char *cmd, char **argv, char **env)
 {
 	pid_t c_pid;
 	int status;
-
+	(void)cmd;
 	c_pid = fork();
 	if (c_pid == -1)
 	{
@@ -102,7 +106,27 @@ void executeCmd(char *cmd, char **argv, char **env)
 	{
 		if (execve(argv[0], argv, env) == -1)
 		{
-			printf("%s: No such file or directory\n", cmd);
+			char *path = getenv("PATH");
+			char *token = strtok(path, ":");
+
+			while (token != NULL)
+			{
+				char *cmd = malloc(strlen(token) + strlen(argv[0]) + 2);
+
+				sprintf(cmd, "%s/%s", token, argv[0]);
+
+				if (access(cmd, X_OK) == 0)
+				{
+					execve(cmd, argv, env);
+					free(cmd);
+					exit(EXIT_FAILURE);
+				}
+
+				free(cmd);
+				token = strtok(NULL, ":");
+			}
+
+			printf("%s: No such file of directory\n", argv[0]);
 		}
 		exit(EXIT_FAILURE);
 	}
