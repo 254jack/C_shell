@@ -7,7 +7,7 @@
 void prompt(char **av, char **env)
 {
 	char *cmd = NULL;
-	int i, status;
+	int i, status, p;
 	size_t n = 0;
 	ssize_t n_char;
 	char *argv[MAX_ARGS];
@@ -41,9 +41,13 @@ void prompt(char **av, char **env)
 				cmd[i] = 0;
 			i++;
 		}
-
+		p = 0;
+		argv[p] = strtok(cmd, " ");
+		while (argv[p])
+		{
+			argv[++p] = strtok(NULL, " ");
+		}
 		c_pid = fork();
-		argv[0] = cmd;
 		if (c_pid == -1)
 		{
 			free(cmd);
