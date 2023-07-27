@@ -1,11 +1,7 @@
 #include "shell.h"
 
-void removeNewline(char *str);
-void tokenizeCommand(char *cmd, char **argv);
-void executeCommand(char *cmd, char **argv, char **env);
-
 /**
- * prompt - Displays a prompt and executes user commands
+ * prompt - Displays a prompt and executes user Cmds
  * @av: Argument vector
  * @env: Environment variable
  */
@@ -18,7 +14,10 @@ void prompt(char **av, char **env)
 
 	while (1)
 	{
-		printf("Cisfun$ ");
+		if (isatty(STDIN_FILENO))
+		{
+			printf("Cisfun$ ");
+		}
 		n_char = getline(&cmd, &n, stdin);
 
 		if (n_char == -1)
@@ -36,17 +35,25 @@ void prompt(char **av, char **env)
 			}
 		}
 
-		removeNewline(cmd);
-		tokenizeCommand(cmd, argv);
+		lid_ln(cmd);
+		if (strcmp(cmd, "exit") == 0)
+		{
+			break;
+		}
+		tokenizeCmd(cmd, argv);
 
-		executeCommand(av[0], argv, env);
+		executeCmd(av[0], argv, env);
 
 		free(cmd);
 		cmd = NULL;
 	}
 }
-
-void removeNewline(char *str)
+/**
+ * lid_ln - a function that removes the newline
+ * @str: string
+ * Return: 0
+ */
+void lid_ln(char *str)
 {
 	int i = 0;
 
@@ -57,8 +64,13 @@ void removeNewline(char *str)
 		i++;
 	}
 }
-
-void tokenizeCommand(char *cmd, char **argv)
+/**
+ * tokenizeCmd - a function that splits the string into tokens
+ * @cmd: string command
+ * @argv: argument vector
+ * Return: 0
+ */
+void tokenizeCmd(char *cmd, char **argv)
 {
 	int p = 0;
 
@@ -69,7 +81,13 @@ void tokenizeCommand(char *cmd, char **argv)
 	}
 }
 
-void executeCommand(char *cmd, char **argv, char **env)
+/**
+ * executeCmd - a function that executes a Cmd using execve.
+ * @cmd: The Cmd to execute
+ * @argv: The arguments for the Cmd
+ * @env: The environment variable
+ */
+void executeCmd(char *cmd, char **argv, char **env)
 {
 	pid_t c_pid;
 	int status;

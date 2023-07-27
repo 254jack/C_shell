@@ -4,14 +4,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "shell.h"
-
 /**
-* main - the main function entry point of the program
-* @ac: argument count
-* @av: arg vector
-* @env: environment variable
-*
-* Return: 0
+ * main - the main function of my project
+ * @argc: argument count of my project.
+ * @argv: argment venctor
+ * @env: environment variable
+ * Return: 0
 */
 int main(int argc, char **argv, char **env)
 {
