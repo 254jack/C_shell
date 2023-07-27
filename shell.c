@@ -1,5 +1,9 @@
 #include "shell.h"
 
+void removeNewline(char *str);
+void tokenizeCommand(char *cmd, char **argv);
+void executeCommand(char *cmd, char **argv, char **env);
+
 /**
  * prompt - Displays a prompt and executes user commands
  * @av: Argument vector
@@ -42,10 +46,6 @@ void prompt(char **av, char **env)
 	}
 }
 
-/**
- * removeNewline - Removes the newline character from a string
- * @str: The string to modify
- */
 void removeNewline(char *str)
 {
 	int i = 0;
@@ -58,11 +58,6 @@ void removeNewline(char *str)
 	}
 }
 
-/**
- * tokenizeCommand - Tokenizes a command string into arguments
- * @cmd: The command string to tokenize
- * @argv: The array to store the arguments
- */
 void tokenizeCommand(char *cmd, char **argv)
 {
 	int p = 0;
@@ -74,12 +69,6 @@ void tokenizeCommand(char *cmd, char **argv)
 	}
 }
 
-/**
- * executeCommand - Executes a command using execve
- * @cmd: The command to execute
- * @argv: The arguments for the command
- * @env: The environment variable
- */
 void executeCommand(char *cmd, char **argv, char **env)
 {
 	pid_t c_pid;

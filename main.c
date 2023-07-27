@@ -13,11 +13,11 @@
 *
 * Return: 0
 */
-int main(int ac, char **av, char **env)
+int main(int argc, char **argv, char **env)
 {
-	if (ac == 1)
+	if (argc == 1)
 	{
-		prompt(av, env);
+		prompt(argv, env);
 	}
 	return (0);
 }
