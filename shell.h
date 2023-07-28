@@ -13,5 +13,6 @@ void prompt(char **av, char **env);
 void lid_ln(char *str);
 void tokenizeCmd(char *cmd, char **argv);
 void executeCmd(char *cmd, char **argv, char **env);
+void h_exit(char *cmd);
 
-#endif /* SHELL_H */
+#endif
