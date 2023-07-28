@@ -9,6 +9,14 @@ void h_exit(char *cmd)
 	{
 		int status = atoi(cmd + 5);
 
+		if (status < 0)
+		{
+			printf("./hsh: exit: illegal number: %d\n", status);
+		}
+		else
+		{
+			exit(status);
+		}
 		free(cmd);
 		_Exit(status);
 	}
