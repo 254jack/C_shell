@@ -6,9 +6,9 @@
 #include "shell.h"
 /**
  * main - the main function of my project
- * @argc: argument count
- * @argv: argument vector
- * @env: environment varaible
+ * @argc:the  argument count
+ * @argv: the argument vector
+ * @env:the environment varaible
  * Return: 0
  */
 int main(int argc, char **argv, char **env)
