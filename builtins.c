@@ -5,9 +5,15 @@
  */
 void h_exit(char *cmd)
 {
-	if (strcmp(cmd, "exit") == 0)
+	if (strncmp(cmd, "exit ", 5) == 0)
 	{
+		int status = atoi(cmd + 5);
 
+		free(cmd);
+		exit(status);
+	}
+	else if (strcmp(cmd, "exit") == 0)
+	{
 		free(cmd);
 		exit(EXIT_SUCCESS);
 	}
