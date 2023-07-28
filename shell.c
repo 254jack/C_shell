@@ -3,7 +3,7 @@
 #define MAX_ARGS 10
 
 /**
- * prompt - Displays a prompt and executes user cmds
+ * prompt - a function that displays a prompt and executes user cmds
  * @av: Argument vector
  * @env: Environment variable
  */
@@ -97,6 +97,16 @@ void executeCmd(char *cmd, char **argv, char **env)
 	pid_t c_pid;
 	int status;
 	(void)cmd;
+	if (strcmp(argv[0], "env") == 0)
+    {
+        char **env_ptr = env;
+        while (*env_ptr != NULL)
+        {
+            printf("%s\n", *env_ptr);
+            env_ptr++;
+        }
+        return;
+	}
 	c_pid = fork();
 	if (c_pid == -1)
 	{
