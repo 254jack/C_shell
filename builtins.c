@@ -8,17 +8,32 @@ void h_exit(char *cmd)
 {
 	if (strncmp(cmd, "exit ", 5) == 0)
 	{
-		int status = atoi(cmd + 5);
+		int status;
+		char *arg = cmd + 5;
+		int isNumeric = 1;
+		size_t arglen = strlen(arg);
+		size_t i;
 
-		if (status < 0)
+		for (i = 0; i < arglen; i++)
 		{
-			fprintf(stderr, "./hsh: 1: exit: Illegal number: %d\n", status);
-			_Exit(2);
+			if (!isdigit((unsigned char)arg[i]))
+			{
+				isNumeric = 0;
+				break;
+			}
+		}
+
+		if (isNumeric)
+		{
+			status = atoi(arg);
+			free(cmd);
+			_Exit(status);
 		}
 		else
 		{
+			fprintf(stderr, "./hsh: 1: exit: Illegal number: %s\n", arg);
 			free(cmd);
-			_Exit(status);
+			_Exit(2);
 		}
 	}
 	else if (strcmp(cmd, "exit") == 0)

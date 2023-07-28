@@ -40,7 +40,7 @@ void prompt(char **av, char **env)
 		h_exit(cmd);
 		if (strcmp(cmd, "exit") == 0)
 		{
-			h_exit(cmd);
+			exit(EXIT_SUCCESS);
 			break;
 		}
 		tokenizeCmd(cmd, argv);
