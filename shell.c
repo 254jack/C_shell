@@ -1,3 +1,4 @@
+#include "shell.h"
 #define MAX_ARGS 10
 
 /**
