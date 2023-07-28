@@ -6,7 +6,7 @@
  */
 int betty(void)
 {
-	printf("Hello, Jack && Chacha\n");
+	printf("Hello\n");
 
 	return (0);
 }
