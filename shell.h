@@ -12,4 +12,12 @@
 #define MAX_ARGS 10
 #define _GNU_SOURCEls
 
+
+void prompt(char **av, char **env);
+void lid_ln(char *str);
+void tokenizeCmd(char *cmd, char **argv);
+void executeCmd(char *cmd, char **argv, char **env);
+void h_exit(char *cmd);
+void h_cd(char *cmd, char *old_dir, char *new_dir);
+
 #endif
