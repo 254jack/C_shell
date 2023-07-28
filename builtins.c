@@ -10,11 +10,11 @@ void h_exit(char *cmd)
 		int status = atoi(cmd + 5);
 
 		free(cmd);
-		exit(status);
+		_Exit(status);
 	}
 	else if (strcmp(cmd, "exit") == 0)
 	{
 		free(cmd);
-		exit(EXIT_SUCCESS);
+		_Exit(EXIT_SUCCESS);
 	}
 }
