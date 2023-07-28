@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * h_exit - a function that handles exit command
  * @cmd: command
@@ -11,14 +12,14 @@ void h_exit(char *cmd)
 
 		if (status < 0)
 		{
-			printf("./hsh: exit: illegal number: %d\n", status);
+			fprintf(stderr, "./hsh: 1: exit: Illegal number: %d\n", status);
+			_Exit(2);
 		}
 		else
 		{
-			exit(status);
+			free(cmd);
+			_Exit(status);
 		}
-		free(cmd);
-		_Exit(status);
 	}
 	else if (strcmp(cmd, "exit") == 0)
 	{
