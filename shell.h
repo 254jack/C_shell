@@ -10,7 +10,8 @@
 #include <sys/types.h>
 
 #define MAX_ARGS 10
-#define _GNU_SOURCE
+#define _GNU_SOURCEls
+
 
 void prompt(char **av, char **env);
 void lid_ln(char *str);
