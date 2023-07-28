@@ -38,6 +38,11 @@ void prompt(char **av, char **env)
 		}
 		lid_ln(cmd);
 		h_exit(cmd);
+		if (strcmp(cmd, "exit") == 0)
+		{
+			h_exit(cmd);
+			break;
+		}
 		tokenizeCmd(cmd, argv);
 		executeCmd(av[0], argv, env);
 		free(cmd);
