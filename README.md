@@ -1,4 +1,4 @@
-
+# simple_shell
 
 Learning Objectives.
 
@@ -30,7 +30,7 @@ General.
     A README.md file, at the root of the folder of the project is mandatory
     Your code should use the Betty style. It will be checked using betty-style.pl and betty-doc.pl
     Your shell should not have any memory leaks
-   ions per file
+    No more than 5 functions per file
     All your header files should be include guarded
     Use system calls only when you need to (why?)
 
@@ -377,3 +377,6 @@ Example:
     $ echo $NAME
     $
 
+    AUTHORS
+1.AMAZIAH CHACHA.
+2.JACKSON NJOROGE.
