@@ -17,12 +17,12 @@ void exc_env_cmd(char **env)
 }
 
 /**
- * exc_Exa - Executes the given executable file.
- * @executable: The name of the executable file.
- * @argv: The arguments for the executable.
+ * exc_Exa - Executes the given extra file.
+ * @extra: The name of the extra file.
+ * @argv: The arguments for the extra.
  * @env: The environment variables.
  */
-void exc_Exa(char *executable, char **argv, char **env)
+void exc_Exa(char *extra, char **argv, char **env)
 {
 	char *cmd_path = NULL;
 	char *path = getenv("PATH");
@@ -30,8 +30,8 @@ void exc_Exa(char *executable, char **argv, char **env)
 
 	while (token != NULL)
 	{
-		cmd_path = malloc(strlen(token) + strlen(executable) + 2);
-		sprintf(cmd_path, "%s/%s", token, executable);
+		cmd_path = malloc(strlen(token) + strlen(extra) + 2);
+		sprintf(cmd_path, "%s/%s", token, extra);
 
 		if (access(cmd_path, X_OK) == 0)
 		{
