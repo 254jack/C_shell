@@ -41,6 +41,7 @@ void prompt(char **av, char **env)
 		{
 			free(cmd);
 			exit(EXIT_SUCCESS);
+			break;
 		}
 		tokenizeCmd(cmd, argv);
 		executeCmd(av[0], argv, env);
