@@ -14,6 +14,6 @@
 int main(int argc, char **argv, char **env)
 {
 	(void)argc;
-
+	promt(argv,env);
 	return (EXIT_SUCCESS);
 }
