@@ -9,7 +9,7 @@
 #define MAX_ARGS 10
 #define _GNU_SOURCE
 
-void prompt(char **av, char **env);
+void prompttt(char **av, char **env);
 void lid_ln(char *str);
 void tokenizeCmd(char *cmd, char **argv);
 void executeCmd(char *cmd, char **argv, char **env);
