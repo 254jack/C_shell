@@ -62,7 +62,6 @@ void executeCmd(char *cmd, char **argv, char **env)
 		exc_env_cmd(env);
 		return;
 	}
-
 	c_pid = fork();
 	if (c_pid == -1)
 	{

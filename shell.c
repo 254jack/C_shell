@@ -10,6 +10,8 @@
 void prompt(char **av, char **env)
 {
 	char *cmd = NULL;
+	char old_dir[PATH_MAX] = "";
+	char new_dir[PATH_MAX] = "";
 	size_t n = 0;
 	ssize_t n_char;
 	char *argv[MAX_ARGS];
@@ -36,12 +38,24 @@ void prompt(char **av, char **env)
 				exit(EXIT_FAILURE);
 			}
 		}
+		if (cmd == NULL || cmd[0] == '\n')
+		{
+			free(cmd);
+			continue;
+		}
 		lid_ln(cmd);
 		h_exit(cmd);
 		if (strcmp(cmd, "exit") == 0)
 		{
 			exit(EXIT_SUCCESS);
 			break;
+		}
+		if (strncmp(cmd, "cd", 2) == 0)
+		{
+			h_cd(cmd, old_dir, new_dir);
+			free(cmd);
+			cmd = NULL;
+			continue;
 		}
 		tokenizeCmd(cmd, argv);
 		executeCmd(av[0], argv, env);
