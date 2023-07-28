@@ -94,55 +94,52 @@ void tokenizeCmd(char *cmd, char **argv)
  */
 void executeCmd(char *cmd, char **argv, char **env)
 {
-	pid_t c_pid;
-	int status;
+	char **env_ptr = env;
+	char *path = getenv("PATH");
+	char *token = strtok(path, ":");
 	(void)cmd;
+
 	if (strcmp(argv[0], "env") == 0)
-    {
-        char **env_ptr = env;
-        while (*env_ptr != NULL)
-        {
-            printf("%s\n", *env_ptr);
-            env_ptr++;
-        }
-        return;
-	}
-	c_pid = fork();
-	if (c_pid == -1)
 	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (c_pid == 0)
-	{
-		if (execve(argv[0], argv, env) == -1)
+		while (*env_ptr != NULL)
 		{
-			char *path = getenv("PATH");
-			char *token = strtok(path, ":");
-
-			while (token != NULL)
-			{
-				char *cmd = malloc(strlen(token) + strlen(argv[0]) + 2);
-
-				sprintf(cmd, "%s/%s", token, argv[0]);
-
-				if (access(cmd, X_OK) == 0)
-				{
-					execve(cmd, argv, env);
-					free(cmd);
-					exit(EXIT_FAILURE);
-				}
-
-				free(cmd);
-				token = strtok(NULL, ":");
-			}
-
-			printf("%s: No such file of directory\n", argv[0]);
+			printf("%s\n", *env_ptr);
+			env_ptr++;
 		}
-		exit(EXIT_FAILURE);
+		return;
 	}
-	else
+
+	while (token != NULL)
 	{
-		wait(&status);
+		char *cmd = malloc(strlen(token) + strlen(argv[0]) + 2);
+		sprintf(cmd, "%s/%s", token, argv[0]);
+
+		if (access(cmd, X_OK) == 0)
+		{
+			pid_t c_pid = fork();
+			if (c_pid == -1)
+			{
+				perror("fork");
+				exit(EXIT_FAILURE);
+			}
+			if (c_pid == 0)
+			{
+				execve(cmd, argv, env);
+				perror("execve");
+				free(cmd);
+				exit(EXIT_FAILURE);
+			}
+			else
+			{
+				int status;
+				wait(&status);
+				free(cmd);
+				return;
+			}
+		}
+
+		free(cmd);
+		token = strtok(NULL, ":");
 	}
+	fprintf(stderr, "%s: cmd not found\n", argv[0]);
 }
