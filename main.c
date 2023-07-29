@@ -17,6 +17,7 @@ int main(int argc, char **argv, char **env)
 void sgnal_h(int sig)
 {
 	(void)sig;
-    printf("Received SIGINT (Ctrl-C)\n");
-    exit(EXIT_SUCCESS);
+
+	printf("Received SIGINT (Ctrl-C)\n");
+	exit(EXIT_SUCCESS);
 }

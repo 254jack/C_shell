@@ -55,6 +55,7 @@ void prompt(char **av, char **env)
 		for (i = 0; i < n_cmds; i++)
 		{
 			char *current_cmd = cmds[i];
+
 			lid_ln(current_cmd);
 			h_exit(current_cmd);
 
@@ -113,7 +114,7 @@ int tokenizeCmd(char *cmd, char **argv)
 		argv[p] = strtok(NULL, " ");
 	}
 
-	return p;
+	return (p);
 }
 int t_cmds(char *input, char **cmds)
 {
@@ -128,5 +129,5 @@ int t_cmds(char *input, char **cmds)
 	}
 
 	cmds[n_cmds] = NULL;
-	return n_cmds;
+	return (n_cmds);
 }

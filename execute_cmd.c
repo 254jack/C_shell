@@ -83,6 +83,16 @@ void executeCmd(char *cmd, char **argv, char **env)
 		exc_env_cmd(env);
 		return;
 	}
+	else if (strcmp(argv[0], "setenv") == 0)
+	{
+		setenv_cmd(argv);
+		return;
+	}
+	else if (strcmp(argv[0], "unsetenv") == 0)
+	{
+		unsetenv_cmd(argv);
+		return;
+	}
 
 	c_pid = fork();
 	if (c_pid == -1)
@@ -96,13 +106,17 @@ void executeCmd(char *cmd, char **argv, char **env)
 		if (execve(argv[0], argv, env) == -1)
 		{
 			exc_Exa(argv[0], argv, env);
-			perror("./hsh");
+			fprintf(stderr, "./hsh: 1: %s: not found\n", argv[0]);
 			exit(127);
 		}
-		exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
 		wait(&status);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+		else
+			status = 127;
 	}
 }
