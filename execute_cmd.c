@@ -17,7 +17,7 @@ void exc_env_cmd(char **env)
 }
 
 /**
- * exc_Exa - a function that executes the given extra file.
+ * exc_Exa - Executes the given extra file.
  * @extra: The name of the extra file.
  * @argv: The arguments for the extra.
  * @env: The environment variables.
@@ -31,11 +31,6 @@ void exc_Exa(char *extra, char **argv, char **env)
 	while (token != NULL)
 	{
 		cmd_path = malloc(strlen(token) + strlen(extra) + 2);
-		if (cmd_path == NULL)
-		{
-			perror("malloc");
-			exit(EXIT_FAILURE);
-		}
 		sprintf(cmd_path, "%s/%s", token, extra);
 
 		if (access(cmd_path, X_OK) == 0)
