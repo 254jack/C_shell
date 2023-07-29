@@ -18,6 +18,7 @@ void prompt(char **av, char **env)
 
 	while (1)
 	{
+
 		if (isatty(STDIN_FILENO))
 		{
 			printf("Cisfun$ ");
@@ -41,21 +42,23 @@ void prompt(char **av, char **env)
 		if (cmd == NULL || cmd[0] == '\n')
 		{
 			free(cmd);
+			cmd = NULL;
 			continue;
 		}
 		lid_ln(cmd);
 		h_exit(cmd);
 		if (strcmp(cmd, "exit") == 0)
 		{
+			free(cmd);
 			exit(EXIT_SUCCESS);
-			break;
 		}
+
 		if (strncmp(cmd, "cd", 2) == 0)
 		{
 			h_cd(cmd, old_dir, new_dir);
 			free(cmd);
 			cmd = NULL;
-			continue;
+			return;
 		}
 		tokenizeCmd(cmd, argv);
 		executeCmd(av[0], argv, env);
@@ -85,14 +88,17 @@ void lid_ln(char *str)
  * @argv: argument vector
  * Return: 0
  */
-void tokenizeCmd(char *cmd, char **argv)
+int tokenizeCmd(char *cmd, char **argv)
 {
 	int p = 0;
 
 	argv[p] = strtok(cmd, " ");
 
-	while (argv[p])
+	while (argv[p] != NULL && p < MAX_ARGS - 1)
 	{
-		argv[++p] = strtok(NULL, " ");
+		p++;
+		argv[p] = strtok(NULL, " ");
 	}
+
+	return p;
 }
