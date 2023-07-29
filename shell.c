@@ -25,6 +25,7 @@ void prompt(char **av, char **env)
 		if (isatty(STDIN_FILENO))
 		{
 			printf("Cisfun$ ");
+			fflush(stdout);
 		}
 		n_char = getline(&cmd, &n, stdin);
 
