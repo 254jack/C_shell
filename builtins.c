@@ -50,34 +50,34 @@ void h_exit(char *cmd)
  */
 char *g_ddir(char *arg)
 {
-    char *ddir = getenv("HOME");
+	char *ddir = getenv("HOME");
 	(void)arg;
 
-    if (!ddir)
-    {
-        fprintf(stderr, "cd: could not determine the home directory\n");
-        return NULL;
-    }
+	if (!ddir)
+	{
+		fprintf(stderr, "cd: could not determine the home directory\n");
+		return (NULL);
+	}
 
-    return ddir;
+	return (ddir);
 }
 
 /**
  * h_old_dir - a helper function to handle the previous directory argument
  * @old_dir: previous directory
  * @arg: argument
- * Return: the previous directory or NULL if it doesn't exist
+ * Return: 0
  */
 char *h_old_dir(char *old_dir, char *arg)
 {
 	(void)arg;
-    if (old_dir[0] == '\0')
-    {
-        fprintf(stderr, "cd: no previous directory\n");
-        return NULL;
-    }
+	if (old_dir[0] == '\0')
+	{
+		fprintf(stderr, "cd: no previous directory\n");
+		return (NULL);
+	}
 
-    return old_dir;
+	return (old_dir);
 }
 
 /**
@@ -89,25 +89,25 @@ char *h_old_dir(char *old_dir, char *arg)
  */
 int c_d(char *arg, char *old_dir, char *new_dir)
 {
-    if (getcwd(old_dir, PATH_MAX) == NULL)
-    {
-        perror("cd: getcwd failed");
-        return 0;
-    }
+	if (getcwd(old_dir, PATH_MAX) == NULL)
+	{
+		perror("cd: getcwd failed");
+		return (0);
+	}
 
-    if (chdir(arg) == -1)
-    {
-        perror("cd");
-        return 0;
-    }
+	if (chdir(arg) == -1)
+	{
+		perror("cd");
+		return (0);
+	}
 
-    if (getcwd(new_dir, PATH_MAX) == NULL)
-    {
-        perror("cd: getcwd failed");
-        return 0;
-    }
+	if (getcwd(new_dir, PATH_MAX) == NULL)
+	{
+		perror("cd: getcwd failed");
+		return (0);
+	}
 
-    return 1;
+	return (1);
 }
 
 /**
@@ -118,34 +118,34 @@ int c_d(char *arg, char *old_dir, char *new_dir)
  */
 void h_cd(char *cmd, char *old_dir, char *new_dir)
 {
-    if (strncmp(cmd, "cd ", 3) == 0)
-    {
-        char *arg = cmd + 3;
+	if (strncmp(cmd, "cd ", 3) == 0)
+	{
+		char *arg = cmd + 3;
 
-        if (arg[0] == '\0')
-        {
-            arg = g_ddir(arg);
-            if (!arg)
-            {
-                return;
-            }
-        }
-        else if (strcmp(arg, "-") == 0)
-        {
-            arg = h_old_dir(old_dir, arg);
-            if (!arg)
-            {
-                return;
-            }
-        }
+		if (arg[0] == '\0')
+		{
+			arg = g_ddir(arg);
+			if (!arg)
+			{
+				return;
+			}
+		}
+		else if (strcmp(arg, "-") == 0)
+		{
+			arg = h_old_dir(old_dir, arg);
+			if (!arg)
+			{
+				return;
+			}
+		}
 
-        if (c_d(arg, old_dir, new_dir))
-        {
-            if (setenv("PWD", new_dir, 1) != 0)
-            {
-                perror("cd: setenv failed");
-                return;
-            }
-        }
-    }
+		if (c_d(arg, old_dir, new_dir))
+		{
+			if (setenv("PWD", new_dir, 1) != 0)
+			{
+				perror("cd: setenv failed");
+				return;
+			}
+		}
+	}
 }
