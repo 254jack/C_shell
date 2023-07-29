@@ -31,6 +31,11 @@ void exc_Exa(char *extra, char **argv, char **env)
 	while (token != NULL)
 	{
 		cmd_path = malloc(strlen(token) + strlen(extra) + 2);
+		if (cmd_path == NULL)
+		{
+			perror("malloc");
+			exit(EXIT_FAILURE);
+		}
 		sprintf(cmd_path, "%s/%s", token, extra);
 
 		if (access(cmd_path, X_OK) == 0)
@@ -46,22 +51,38 @@ void exc_Exa(char *extra, char **argv, char **env)
 }
 
 /**
- * executeCmd - a fucntion that executes a command using execve.
+ * executeCmd - a function that executes a command using execve.
  * @cmd: command
  * @argv: argument vector
  * @env: environment variables.
  */
 void executeCmd(char *cmd, char **argv, char **env)
 {
+	int all_empty = 1;
 	pid_t c_pid;
 	int status;
 	(void)cmd;
+
+	for (int i = 0; argv[i] != NULL; i++)
+	{
+		if (argv[i][0] != '\0')
+		{
+			all_empty = 0;
+			break;
+		}
+	}
+
+	if (all_empty)
+	{
+		return;
+	}
 
 	if (strcmp(argv[0], "env") == 0)
 	{
 		exc_env_cmd(env);
 		return;
 	}
+
 	c_pid = fork();
 	if (c_pid == -1)
 	{
@@ -74,7 +95,8 @@ void executeCmd(char *cmd, char **argv, char **env)
 		if (execve(argv[0], argv, env) == -1)
 		{
 			exc_Exa(argv[0], argv, env);
-			printf("%s: No such file or directory\n", argv[0]);
+			perror("./hsh");
+			exit(127);
 		}
 		exit(EXIT_FAILURE);
 	}

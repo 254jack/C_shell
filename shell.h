@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include<signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #define PATH_MAX 4096
@@ -22,5 +23,7 @@ void executeCmd(char *cmd, char **argv, char **env);
 void h_exit(char *cmd);
 void h_cd(char *cmd, char *old_dir, char *new_dir);
 int t_cmds(char *input, char **cmds);
+void sgnal_h(int sig);
+
 
 #endif
