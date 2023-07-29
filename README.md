@@ -1,6 +1,7 @@
-# simple_shell
+                                        SIMPLE_SHELL
+            #simple_shell
 
-Learning Objectives.
+                                    Learning Objectives.
 
 At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
 
@@ -20,9 +21,9 @@ At the end of this project, you are expected to be able to explain to anyone, wi
           How to suspend the execution of a process until one of its children terminates.
           What is EOF / “end-of-file”?.
 
-Requirements.
+                                        Requirements.
 
-General.
+                                        General.
 
     Allowed editors: vi, vim, emacs
     All your files will be compiled on Ubuntu 20.04 LTS using gcc, using the options -Wall -Werror -Wextra -pedantic -std=gnu89
@@ -69,7 +70,7 @@ General.
                           write (man 2 write)
 
 
-Output
+                                        Output
 
 Unless specified otherwise, your program must have the exact same output as sh (/bin/sh) as well as the exact same error output.
 The only difference is when you print an error, the name of the program must be equivalent to your argv[0] (See below)
@@ -88,13 +89,13 @@ Same error with your program hsh:
       ./././hsh: 1: qwerty: not found
       $
 
-Compilation
+                                        Compilation
 
 Your shell will be compiled this way:
 
       gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 
-Testing
+                                            Testing
 
 Your shell should work like this in interactive mode:
 
@@ -119,7 +120,7 @@ But also in non-interactive mode:
       hsh main.c shell.c test_ls_2
       $
 
-   GENERAL VIEW OF THE PROJECT.
+                                           GENERAL VIEW OF THE PROJECT.
 
 A simple UNIX command interpreter written as part of the low-level programming and algorithm track at ALX.
 
@@ -135,59 +136,59 @@ To invoke "shell(command)", compile all .c files in the repository and run the r
 
 "shell(command)" can be invoked both interactively and non-interactively and if invoked with standard input not connected to a terminal, it reads and executes received commands in order.
 
-Example:
+    Example:
 
     $ echo "echo 'hello'" | ./shell
     'hello'
     $
 If "shell(command)" is invoked with standard input connected to a terminal (determined by isatty(3)), an interactive shell is opened. When executing interactively,  "shell(command)" hedisplays the prompt $  when it is ready to read a command.
 
-Example:
+    Example:
 
     $./shell
     $
 Alternatively, if command line arguments are supplied upon invocation, shellex treats the first argument as a file from which to read commands. The supplied file should contain one command per line.  "shell(command)" runs each of the commands contained in the file in order before exiting.
 
-Example:
+    Example:
 
         $ cat test
         echo 'hello'
         $ ./shell test
         'hello'
         $
-Environment 
+                                                        Environment 
 
 Upon invocation,  "shell(command)" receives and copies the environment of the parent process in which it was executed. This environment is an array of name-value strings describing variables in the format NAME=VALUE. A few key environmental variables are:
 
-HOME
+                                                            HOME
 
 The home directory of the current user and the default directory argument for the cd builtin command.
 
     $ echo "echo $HOME" | ./shell
     /home/vagrant
   
-  PWD
+                                                              PWD
   
 The current working directory as set by the cd command.
 
     $ echo "echo $PWD" | ./shell
     /home/vagrant/ALX/simple_shell
     
-  OLDPWD
+                                                              OLDPWD
   
 The previous working directory as set by the cd command.
 
     $ echo "echo $OLDPWD" | ./shell
     /home/vagrant/ALX/printf
 
-PATH
+                                                                PATH
 
 A colon-separated list of directories in which the shell looks for commands. A null directory name in the path (represented by any of two adjacent colons, an initial colon, or a trailing colon) indicates the current directory.
 
     $ echo "echo $PATH" | ./shell
     /home/vagrant/.cargo/bin:/home/vagrant/.local/bin:/home/vagrant/.rbenv/plugins/ruby-build/bin:/home/vagrant/.rbenv/shims:/home/vagrant/.rbenv/bin:/home/vagrant/.nvm/versions/node/v10.15.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/vagrant/.cargo/bin:/home/vagrant/workflow:/home/vagrant/.local/bin
 
-Command Execution 
+                                                            Command Execution 
 
 After receiving a command,  "shell(command)" tokenizes it into words using " " as a delimiter. The first word is considered the command and all remaining words are considered arguments to that command.  "shell(command)" then proceeds with the following actions:
 
@@ -195,7 +196,7 @@ If the first character of the command is neither a slash (\) nor dot (.), the  "
 If the first character of the command is none of a slash (\), dot (.), nor builtin, shellex searches each element of the PATH environmental variable for a directory containing an executable file by that name.
 If the first character of the command is a slash (\) or dot (.) or either of the above searches was successful, the  "shell(command)" executes the named program with any remaining given arguments in a separate execution environment.
 
-Exit Status 
+                                                                Exit Status 
 
 "shell(command)" returns the exit status of the last command executed, with zero indicating success and non-zero indicating failure.
 
@@ -203,7 +204,7 @@ If a command is not found, the return status is 127; if a command is found but i
 
 All builtins return zero on success and one or two on incorrect usage (indicated by a corresponding error message).
 
-Signals 
+                                                                    Signals 
 
 While running in interactive mode, shellex ignores the keyboard input Ctrl+c. Alternatively, an input of end-of-file (Ctrl+d) will exit the program.
 
@@ -214,65 +215,65 @@ User hits Ctrl+d in the third line.
     $ ^C
     $
 
-Variable Replacement\
+                                                            Variable Replacement\
 
  "shell(command)" interprets the $ character for variable replacement.
 
-$ENV_VARIABLE
+                                                                $ENV_VARIABLE
 
 ENV_VARIABLE is substituted with its value.
 
-Example:
+    Example:
 
     $ echo "echo $PWD" | ./shell
     /home/vagrant/ALX/simple_shell
    
-  $?
+                                                                  $?
     
 ? is substitued with the return value of the last program executed.
 
-Example:
+    Example:
 
       $ echo "echo $?" | ./shell
       0
   
-  $$
+                                                                  $$
   
 The second $ is substitued with the current process ID.
 
-Example:
+    Example:
     
     $ echo "echo $$" | ./shell
     6494
 
-Comments
+                                                                Comments
 
  "shell(command)" ignores all words and characters preceeded by a # character on a line.
 
-Example:
+    Example:
 
     $ echo "echo 'hello' #this will be ignored!" | ./shell
     'hello'
 
-Operators
+                                                                Operators
 
   "shell(command)"specially interprets the following operator characters:
 
-; - Command separator
+                                                        ; - Command separator
 
 Commands separated by a ; are executed sequentially.
 
-Example:
+    Example:
 
     $ echo "echo 'hello' ; echo 'world'" | ./shell
     'hello'
     'world'
   
-  && - AND logical operator.
+                                                      && - AND logical operator.
   
 command1 && command2: command2 is executed if, and only if, command1 returns an exit status of zero.
 
-Example:
+    Example:
 
     $ echo "error! && echo 'hello'" | ./shell
     ./shellex: 1: error!: not found
@@ -280,20 +281,20 @@ Example:
     'all good'
     'hello'
   
-  || - OR logical operator.
+                                                      || - OR logical operator.
     
 command1 || command2: command2 is executed if, and only if, command1 returns a non-zero exit status.
 
-Example:
+    Example:
 
     $ echo "error! || echo 'but still runs'" | ./shell
     ./shell: 1: error!: not found
     'but still runs'
-The operators && and || have equal precedence, followed by ;.
+                                        The operators && and || have equal precedence, followed by ;.
 
 "shell(command)" Builtin Commands.
 
-cd
+                                                                cd
 
 Usage: cd [DIRECTORY]
   Changes the current directory of the process to DIRECTORY.
@@ -301,7 +302,8 @@ Usage: cd [DIRECTORY]
   If the argument - is given, the command is interpreted as cd $OLDPWD and the pathname of the new working directory is printed to standad output.
   If the argument, -- is given, the command is interpreted as cd $OLDPWD but the pathname of the new working directory is not printed.
   The environment variables PWD and OLDPWD are updated after a change of directory.
-  Example:
+  
+        Example:
 
       $ ./shell
       $ pwd
@@ -312,25 +314,27 @@ Usage: cd [DIRECTORY]
       $ cd -
       $ pwd
       /home/vagrant/ALX/simple_shell
-alias
-    Usage: alias [NAME[='VALUE'] ...]
+      
+                                                                alias
+
+ Usage: alias [NAME[='VALUE'] ...]
     Handles aliases.
     alias: Prints a list of all aliases, one per line, in the form NAME='VALUE'.
     alias NAME [NAME2 ...]: Prints the aliases NAME, NAME2, etc. one per line, in the form NAME='VALUE'.
     alias NAME='VALUE' [...]: Defines an alias for each NAME whose VALUE is given. If name is already an alias, its value is replaced with VALUE.
     
-Example:
+    Example:
 
-$ ./shell
-$ alias show=ls
-$ show
-AUTHORS            builtins_help_2.c  errors.c         linkedlist.c        shell.h       test
-README.md          env_builtins.c     getline.c        locate.c            shellex
-alias_builtins.c   environ.c          helper.c         main.c              split.c
-builtin.c          err_msgs1.c        helpers_2.c      man_1_simple_shell  str_funcs1.c
-builtins_help_1.c  err_msgs2.c        input_helpers.c  proc_file_comm.c    str_funcs2.c
+        $ ./shell
+        $ alias show=ls
+        $ show
+        AUTHORS            builtins_help_2.c  errors.c         linkedlist.c        shell.h       test
+        README.md          env_builtins.c     getline.c        locate.c            shellex
+        alias_builtins.c   environ.c          helper.c         main.c              split.c
+        builtin.c          err_msgs1.c        helpers_2.c      man_1_simple_shell  str_funcs1.c
+        builtins_help_1.c  err_msgs2.c        input_helpers.c  proc_file_comm.c    str_funcs2.c
 
-exit.
+                                                                exit.
 
 Usage: exit [STATUS]
     Exits the shell.
@@ -341,7 +345,7 @@ Usage: exit [STATUS]
       $ ./shell
       $ exit
 
-env
+                                                                env
 
   Usage: env
   Prints the current environment.
@@ -352,24 +356,27 @@ env
       NVM_DIR=/home/vagrant/.nvm
       ...
 
-setenv
+                                                                setenv
 
   Usage: setenv [VARIABLE] [VALUE]
   Initializes a new environment variable, or modifies an existing one.
   Upon failure, prints a message to stderr.
-Example:
+  
+      Example:
 
     $ ./shell
     $ setenv NAME KIM
     $ echo $NAME
     KIM
 
-unsetenv
+                                                                unsetenv
 
   Usage: unsetenv [VARIABLE]
   Removes an environmental variable.
-  Upon failure, prints a message to stderr.
-Example:
+  Upon failure, prints a message to stderr
+
+
+    Example:
 
     $ ./shell
     $ setenv NAME KIM
@@ -377,6 +384,6 @@ Example:
     $ echo $NAME
     $
 
-    AUTHORS
+                                                                AUTHORS
     1.AMAZIAH CHACHA.
     2.JACKSON NJOROGE.
