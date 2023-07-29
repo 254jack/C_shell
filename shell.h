@@ -13,7 +13,7 @@
 
 #define MAX_ARGS 10
 #define MAX_COMMANDS 100
-#define _GNU_SOURCEls
+#define _GNU_SOURCE
 
 void prompt(char **av, char **env);
 void lid_ln(char *str);
