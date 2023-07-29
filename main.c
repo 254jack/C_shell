@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include "shell.h"
 /**
- * main - the main function of my project
+ * main - the main function of the project
  * @argc: argument count
  * @argv: argument vector
  * @env: environment varaible
