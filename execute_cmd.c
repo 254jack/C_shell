@@ -1,5 +1,7 @@
 #include "shell.h"
 
+Alias *alias_list = NULL;
+
 /**
  * exc_env_cmd - Executes the "env" command
  * and prints the environment variables.
@@ -88,7 +90,52 @@ void executeCmd(char *cmd, char **argv, char **env)
 			argv[i] = pid_buff;
 		}
 	}
+	if (strcmp(argv[0], "alias") == 0)
+	{
+		if (argv[1] == NULL)
+		{
+			p_a(alias_list);
+		}
+		else if (strchr(argv[1], '=') != NULL)
+		{
+			char *name, *value;
+			char *token = strtok(argv[1], "=");
 
+			while (token != NULL)
+			{
+				Alias *existing_alias = f_a(alias_list, name);
+
+				name = token;
+				token = strtok(NULL, "=");
+				value = token;
+
+				if (existing_alias != NULL)
+				{
+					update_a(existing_alias, value);
+				}
+				else
+				{
+					add_a(&alias_list, name, value);
+				}
+
+				token = strtok(NULL, "=");
+			}
+		}
+		else
+		{
+			int i = 1;
+			while (argv[i] != NULL)
+			{
+				Alias *alias = f_a(alias_list, argv[i]);
+				if (alias != NULL)
+				{
+					printf("alias %s='%s'\n", alias->name, alias->value);
+				}
+				i++;
+			}
+		}
+		return;
+	}
 	if (strcmp(argv[0], "env") == 0)
 	{
 		exc_env_cmd(env);
@@ -138,6 +185,8 @@ void executeCmd(char *cmd, char **argv, char **env)
 	}
 	else
 	{
+		r_vars(argv, WEXITSTATUS(status));
+		d_a(alias_list);
 		waitpid(c_pid, &status, 0);
 		r_vars(argv, status);
 		if (WIFEXITED(status))
