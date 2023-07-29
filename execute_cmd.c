@@ -83,6 +83,11 @@ void executeCmd(char *cmd, char **argv, char **env)
 		exc_env_cmd(env);
 		return;
 	}
+	if (strcmp(argv[0], "cd") == 0)
+    {
+        cd_cmd(argv);
+        return;
+    }
 	else if (strcmp(argv[0], "setenv") == 0)
 	{
 		setenv_cmd(argv);
