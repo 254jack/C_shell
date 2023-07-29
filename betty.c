@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * betty - betty function
+ * betty - this is the betty function
  * Return: 0
  */
 int betty(void)
