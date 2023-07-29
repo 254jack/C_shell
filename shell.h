@@ -5,19 +5,22 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#define PATH_MAX 4096
 
 #define MAX_ARGS 10
+#define MAX_COMMANDS 100
 #define _GNU_SOURCEls
-
 
 void prompt(char **av, char **env);
 void lid_ln(char *str);
-void tokenizeCmd(char *cmd, char **argv);
+int tokenizeCmd(char *cmd, char **argv);
 void executeCmd(char *cmd, char **argv, char **env);
 void h_exit(char *cmd);
 void h_cd(char *cmd, char *old_dir, char *new_dir);
+int t_cmds(char *input, char **cmds);
 
 #endif
