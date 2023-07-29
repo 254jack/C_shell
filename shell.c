@@ -10,8 +10,6 @@
 void prompt(char **av, char **env)
 {
 	char *cmd = NULL;
-	char old_dir[PATH_MAX] = "";
-	char new_dir[PATH_MAX] = "";
 	size_t n = 0;
 	ssize_t n_char;
 	char *argv[MAX_ARGS];
@@ -64,11 +62,6 @@ void prompt(char **av, char **env)
 				free(cmd);
 				exit(EXIT_SUCCESS);
 			}
-
-			if (strncmp(current_cmd, "cd", 2) == 0)
-			{
-				h_cd(current_cmd, old_dir, new_dir);
-			}
 			else
 			{
 				tokenizeCmd(current_cmd, argv);
@@ -110,6 +103,11 @@ int tokenizeCmd(char *cmd, char **argv)
 
 	while (argv[p] != NULL && p < MAX_ARGS - 1)
 	{
+		if (argv[p][0] == '#')
+		{
+			argv[p] = NULL;
+			break;
+		}
 		p++;
 		argv[p] = strtok(NULL, " ");
 	}

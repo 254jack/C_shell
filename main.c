@@ -18,6 +18,6 @@ void sgnal_h(int sig)
 {
 	(void)sig;
 
-	printf("Received SIGINT (Ctrl-C)\n");
+	printf(" Received (Ctrl-C)\n");
 	exit(EXIT_SUCCESS);
 }

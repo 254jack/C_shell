@@ -122,6 +122,6 @@ void executeCmd(char *cmd, char **argv, char **env)
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);
 		else
-			status = 127;
+			status = 2;
 	}
 }

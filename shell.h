@@ -21,12 +21,12 @@ void lid_ln(char *str);
 int tokenizeCmd(char *cmd, char **argv);
 void executeCmd(char *cmd, char **argv, char **env);
 void h_exit(char *cmd);
-void h_cd(char *cmd, char *old_dir, char *new_dir);
 int t_cmds(char *input, char **cmds);
-int cd_cmd(char **argv);
 void sgnal_h(int sig);
 int setenv_cmd(char **argv);
 int unsetenv_cmd(char **argv);
+int cd_cmd(char **argv);
+
 
 
 #endif
