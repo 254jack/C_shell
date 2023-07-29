@@ -26,6 +26,7 @@ void sgnal_h(int sig);
 int setenv_cmd(char **argv);
 int unsetenv_cmd(char **argv);
 int cd_cmd(char **argv);
+void r_vars(char **argv, int status);
 
 
 

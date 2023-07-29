@@ -62,6 +62,8 @@ void executeCmd(char *cmd, char **argv, char **env)
 	int i;
 	int all_empty = 1;
 	int status;
+	char pid_buff[24];
+
 	(void)cmd;
 
 	for (i = 0; argv[i] != NULL; i++)
@@ -77,6 +79,15 @@ void executeCmd(char *cmd, char **argv, char **env)
 	{
 		return;
 	}
+	for (i = 0; argv[i] != NULL; i++)
+	{
+		if (strcmp(argv[i], "$$") == 0)
+		{
+			pid_t pid = getpid();
+			sprintf(pid_buff, "%d", pid);
+			argv[i] = pid_buff;
+		}
+	}
 
 	if (strcmp(argv[0], "env") == 0)
 	{
@@ -84,10 +95,10 @@ void executeCmd(char *cmd, char **argv, char **env)
 		return;
 	}
 	if (strcmp(argv[0], "cd") == 0)
-    {
-        cd_cmd(argv);
-        return;
-    }
+	{
+		cd_cmd(argv);
+		return;
+	}
 	else if (strcmp(argv[0], "setenv") == 0)
 	{
 		setenv_cmd(argv);
@@ -98,8 +109,17 @@ void executeCmd(char *cmd, char **argv, char **env)
 		unsetenv_cmd(argv);
 		return;
 	}
+	if (strcmp(argv[0], "exit") == 0)
+	{
+		free(cmd);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		r_vars(argv, WEXITSTATUS(status));
 
-	c_pid = fork();
+		c_pid = fork();
+	}
 	if (c_pid == -1)
 	{
 		perror("fork");
@@ -118,7 +138,8 @@ void executeCmd(char *cmd, char **argv, char **env)
 	}
 	else
 	{
-		wait(&status);
+		waitpid(c_pid, &status, 0);
+		r_vars(argv, status);
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);
 		else
