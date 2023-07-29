@@ -58,12 +58,13 @@ void exc_Exa(char *extra, char **argv, char **env)
  */
 void executeCmd(char *cmd, char **argv, char **env)
 {
-	int all_empty = 1;
 	pid_t c_pid;
+	int i;
+	int all_empty = 1;
 	int status;
 	(void)cmd;
 
-	for (int i = 0; argv[i] != NULL; i++)
+	for (i = 0; argv[i] != NULL; i++)
 	{
 		if (argv[i][0] != '\0')
 		{
